@@ -63,6 +63,7 @@ formspeclib_touchscreen.ts_on_receive_fields = function (pos, formname, fields, 
 			formspeclib_touchscreen.update_ts_formspec(pos)
 		end
 	else
+		fields.playerName = playername
 		digiline:receptor_send(pos, digiline.rules.default, setchan, fields)
 	end
 end
@@ -192,21 +193,24 @@ minetest.register_node("formspeclib_touchscreen:chest_touchscreen", {
 	
 	allow_metadata_inventory_move = function (pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
-		if not (meta:get_int("locked") < 1 or not minetest.is_protected(pos, player:get_player_name())) then
+		local playername = player:get_player_name()
+		if not (meta:get_int("locked") < 1 or not minetest.is_protected(pos, playername) or minetest.check_player_privs(playername, {protection_bypass = true})) then
 			return 0
 		end
 		return count
 	end,
 	allow_metadata_inventory_put = function (pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
-		if not (meta:get_int("locked") < 1 or not minetest.is_protected(pos, player:get_player_name())) then
+		local playername = player:get_player_name()
+		if not (meta:get_int("locked") < 1 or not minetest.is_protected(pos, playername) or minetest.check_player_privs(playername, {protection_bypass = true})) then
 			return 0
 		end
 		return stack:get_count()
 	end,
 	allow_metadata_inventory_take = function (pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
-		if not (meta:get_int("locked") < 1 or not minetest.is_protected(pos, player:get_player_name())) then
+		local playername = player:get_player_name()
+		if not (meta:get_int("locked") < 1 or not minetest.is_protected(pos, playername) or minetest.check_player_privs(playername, {protection_bypass = true})) then
 			return 0
 		end
 		return stack:get_count()
