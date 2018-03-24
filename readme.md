@@ -24,6 +24,6 @@ You can add elements in one of two ways:
 * `digiline_send(channel, {type = ..., x = ..., y = ..., ...})` adds a new, singular GUI element to the screen. Parameters vary according to formspeclib's specifications.
 * `digiline_send(channel, {width = ..., height = ..., {type = ..., ...}, {type = ..., ...}, ...})` replaces the formspec with an entirely new one with the dimensions and elements specified.
 
-The `append` parameter may be added to either one of these two in order to modify the behavior of the command. If you add `append = false` to the table (eg. `digiline_send(channel, {append = false, ...})`), the formspec will be replaced (even if you only specify a single element). If you add `append = true`, the opposite will happen (the formspec won't be replaced even if you specify multiple elements or new dimensions).
+The `append` parameter may be added to either one of these two in order to modify the behavior of the message. If you add `append = true` to the table, even if you specify multiple elements or new dimensions, the formspec won't be replaced.
 
 Receiving signals from player interaction with the GUI elements works in the same way as it does with digistuff touchscreens. Button `name` parameters work in the same way as they do in 
