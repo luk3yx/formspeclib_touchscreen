@@ -18,7 +18,7 @@ These are the commands:
 * `digiline_send(channel, {command = "lock"})` - Locks the touchscreen to protection.
 * `digiline_send(channel, {command = "unlock"})` - Unlocks the touchscreen.
 
-The system for adding GUI elements is based on [formspeclib](https://github.com/luk3yx/formspeclib) - if you want more information, look there.
+The system for adding GUI elements is based on [formspeclib](https://github.com/luk3yx/formspeclib/wiki/The-formspec-format) - if you want more information, look there.
 
 You can add elements in one of two ways:
 * `digiline_send(channel, {type = ..., x = ..., y = ..., ...})` adds a new, singular GUI element to the screen. Parameters vary according to formspeclib's specifications.
@@ -27,3 +27,8 @@ You can add elements in one of two ways:
 The `append` parameter may be added to either one of these two in order to modify the behavior of the message. If you add `append = true` to the table, even if you specify multiple elements or new dimensions, the formspec won't be replaced.
 
 Receiving signals from player interaction with the GUI elements works in the same way as it does with digistuff touchscreens. Button `name` parameters work in the same way as they do in the digistuff mod.
+
+## Formspeclib Chest Touchscreens
+Formspeclib Chest Touchscreens are formspeclib touchscreens with an 8*4 "main" inventory list. To access this inventory you can add `{type = 'inventory', x = ..., y = ..., width = ..., height = ..., location = "context", name = "main"}` to the formspec. Inventory transfers are handled automatically and are based on touchscreen locking and area protection.
+
+Note: Chest touchscreen protection is not tested.

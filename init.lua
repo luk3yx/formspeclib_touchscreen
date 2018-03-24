@@ -6,6 +6,14 @@ minetest.register_craft({
 		"default:diamond"
 	}
 })
+minetest.register_craft({
+	type = "shapeless",
+	output = "formspeclib_touchscreen:chest_touchscreen",
+	recipe = {
+		"formspeclib_touchscreen:touchscreen",
+		"default:chest"
+	}
+})
 
 formspeclib_touchscreen = {}
 
@@ -138,5 +146,69 @@ minetest.register_node("formspeclib_touchscreen:touchscreen", {
 			action = formspeclib_touchscreen.ts_on_digiline_receive
 		},
 	},
-	light_source = 15,
+	light_source = 8,
+})
+
+minetest.register_node("formspeclib_touchscreen:chest_touchscreen", {
+	description = "Formspeclib Chest Touchscreen",
+	groups = {cracky=3},
+	on_construct = function(pos)
+		minetest.get_meta(pos):get_inventory():set_size("main", 32) -- 8*4
+		formspeclib_touchscreen.update_ts_formspec(pos,true)
+	end,
+	drawtype = "nodebox",
+	tiles = {
+		"formspeclib_touchscreen_panel_back.png",
+		"formspeclib_touchscreen_panel_back.png",
+		"formspeclib_touchscreen_panel_back.png",
+		"formspeclib_touchscreen_panel_back.png",
+		"formspeclib_touchscreen_panel_back.png",
+		"formspeclib_touchscreen_ts_front.png^formspeclib_touchscreen_chest_ts_overlay.png"
+		},
+	paramtype = "light",
+	paramtype2 = "facedir",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -0.5, -0.5, 0.4, 0.5, 0.5, 0.5 }
+		}
+    	},
+	on_receive_fields = formspeclib_touchscreen.ts_on_receive_fields,
+	digiline = 
+	{
+		receptor = {},
+		effector = {
+			action = formspeclib_touchscreen.ts_on_digiline_receive
+		},
+	},
+	light_source = 8,
+	can_dig = function(pos, player)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		
+		return inv:is_empty("main") and
+			(meta:get_int("locked") < 1 or not minetest.is_protected(pos, player:get_player_name()))
+	end,
+	
+	allow_metadata_inventory_move = function (pos, from_list, from_index, to_list, to_index, count, player)
+		local meta = minetest.get_meta(pos)
+		if not (meta:get_int("locked") < 1 or not minetest.is_protected(pos, player:get_player_name())) then
+			return 0
+		end
+		return count
+	end,
+	allow_metadata_inventory_put = function (pos, listname, index, stack, player)
+		local meta = minetest.get_meta(pos)
+		if not (meta:get_int("locked") < 1 or not minetest.is_protected(pos, player:get_player_name())) then
+			return 0
+		end
+		return stack:get_count()
+	end,
+	allow_metadata_inventory_take = function (pos, listname, index, stack, player)
+		local meta = minetest.get_meta(pos)
+		if not (meta:get_int("locked") < 1 or not minetest.is_protected(pos, player:get_player_name())) then
+			return 0
+		end
+		return stack:get_count()
+	end,
 })
