@@ -18,7 +18,7 @@ These are the commands:
 * `digiline_send(channel, {command = "lock"})` - Locks the touchscreen to protection.
 * `digiline_send(channel, {command = "unlock"})` - Unlocks the touchscreen.
 
-The system for adding GUI elements is based on [formspeclib](https://github.com/luk3yx/formspeclib/wiki/The-formspec-format) - if you want more information, look there.
+The system for adding GUI elements is based on [formspeclib](https://github.com/luk3yx/formspeclib/wiki) - if you want more information, look there.
 
 You can add elements in one of two ways:
 * `digiline_send(channel, {type = ..., x = ..., y = ..., ...})` adds a new, singular GUI element to the screen. Parameters vary according to formspeclib's specifications.
