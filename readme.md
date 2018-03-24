@@ -26,4 +26,4 @@ You can add elements in one of two ways:
 
 The `append` parameter may be added to either one of these two in order to modify the behavior of the message. If you add `append = true` to the table, even if you specify multiple elements or new dimensions, the formspec won't be replaced.
 
-Receiving signals from player interaction with the GUI elements works in the same way as it does with digistuff touchscreens. Button `name` parameters work in the same way as they do in 
+Receiving signals from player interaction with the GUI elements works in the same way as it does with digistuff touchscreens. Button `name` parameters work in the same way as they do in the digistuff mod.
