@@ -19,7 +19,7 @@ formspeclib_touchscreen.update_ts_formspec = function (pos)
 		local data = minetest.deserialize(meta:get_string("data")) or {}
 		local formspec = formspeclib.render(data, true)
 		
-		if formspec:len() < 1 then formspec = nil end
+		if type(formspec) == "string" and formspec:len() < 1 then formspec = nil end
 		
 		meta:set_string("formspec", formspec or formspeclib.render({
 			width = 10,
