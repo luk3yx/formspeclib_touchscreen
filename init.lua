@@ -17,12 +17,31 @@ minetest.register_craft({
 
 formspeclib_touchscreen = {}
 
+local initial_formspec = formspeclib.render({
+    width = 10,
+    height = 8,
+    {
+        type = "textbox",
+        x = 3.75,
+        y = 3,
+        width = 3,
+        name = "channel",
+        label = "Channel",
+    },
+    {
+        type = "button",
+        x = 4,
+        y = 3.75,
+        width = 2,
+        name = "save",
+        text = "Save",
+    },
+})
+
 formspeclib_touchscreen.update_ts_formspec = function (pos)
 	local meta = minetest.get_meta(pos)
 	if meta:get_int("init") == 0 then
-		meta:set_string("formspec", "size[10,8]"..
-		"field[3.75,3;3,1;channel;Channel;]"..
-		"button_exit[4,3.75;2,1;save;Save]")
+		meta:set_string("formspec", initial_formspec)
 	else
 		local data = minetest.deserialize(meta:get_string("data")) or {}
 		local formspec = formspeclib.render(data, true)
