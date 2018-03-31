@@ -135,48 +135,63 @@ formspeclib_touchscreen.process_command = function (meta, data, msg)
 	return data
 end
 
-minetest.register_node("formspeclib_touchscreen:touchscreen", {
-	description = "Formspeclib Touchscreen",
-	groups = {cracky=3},
-	on_construct = function(pos)
-		formspeclib_touchscreen.update_ts_formspec(pos,true)
-	end,
-	drawtype = "nodebox",
-	tiles = {
-		"formspeclib_touchscreen_panel_back.png",
-		"formspeclib_touchscreen_panel_back.png",
-		"formspeclib_touchscreen_panel_back.png",
-		"formspeclib_touchscreen_panel_back.png",
-		"formspeclib_touchscreen_panel_back.png",
-		"formspeclib_touchscreen_ts_front.png"
-		},
-	paramtype = "light",
-	paramtype2 = "facedir",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{ -0.5, -0.5, 0.4, 0.5, 0.5, 0.5 }
-		}
-    	},
-	on_receive_fields = formspeclib_touchscreen.ts_on_receive_fields,
-	digiline = 
-	{
-		receptor = {},
-		effector = {
-			action = formspeclib_touchscreen.ts_on_digiline_receive
-		},
-	},
-	light_source = 8,
-})
+formspeclib_touchscreen.register_node = function (name, data)
+    local out = {
+	    description = "Formspeclib Touchscreen",
+	    groups = {cracky=3},
+	    on_construct = function(pos)
+		    formspeclib_touchscreen.update_ts_formspec(pos,true)
+	    end,
+	    drawtype = "nodebox",
+	    tiles = {
+		    "formspeclib_touchscreen_panel_back.png",
+		    "formspeclib_touchscreen_panel_back.png",
+		    "formspeclib_touchscreen_panel_back.png",
+		    "formspeclib_touchscreen_panel_back.png",
+		    "formspeclib_touchscreen_panel_back.png",
+		    "formspeclib_touchscreen_ts_front.png"
+		    },
+	    paramtype = "light",
+	    paramtype2 = "facedir",
+	    node_box = {
+		    type = "fixed",
+		    fixed = {
+			    { -0.5, -0.5, 0.4, 0.5, 0.5, 0.5 }
+		    }
+        	},
+	    on_receive_fields = formspeclib_touchscreen.ts_on_receive_fields,
+	    digiline = 
+	    {
+		    receptor = {},
+		    effector = {
+			    action = formspeclib_touchscreen.ts_on_digiline_receive
+		    },
+	    },
+	    light_source = 8,
+    }
+    for k, v in pairs(data) do
+        if k == "on_construct" then
+            if type(v) == "function" then
+                out.on_construct = function(pos)
+                    formspeclib_touchscreen.update_ts_formspec(pos, true)
+                    v(pos)
+                end
+            end
+        else
+            out[k] = v
+        end
+    end
+    
+    return minetest.register_node(name, out)
+end
 
-minetest.register_node("formspeclib_touchscreen:chest_touchscreen", {
+formspeclib_touchscreen.register_node("formspeclib_touchscreen:touchscreen", {})
+
+formspeclib_touchscreen.register_node("formspeclib_touchscreen:chest_touchscreen", {
 	description = "Formspeclib Chest Touchscreen",
-	groups = {cracky=3},
 	on_construct = function(pos)
 		minetest.get_meta(pos):get_inventory():set_size("main", 32) -- 8*4
-		formspeclib_touchscreen.update_ts_formspec(pos,true)
 	end,
-	drawtype = "nodebox",
 	tiles = {
 		"formspeclib_touchscreen_panel_back.png",
 		"formspeclib_touchscreen_panel_back.png",
@@ -185,23 +200,6 @@ minetest.register_node("formspeclib_touchscreen:chest_touchscreen", {
 		"formspeclib_touchscreen_panel_back.png",
 		"formspeclib_touchscreen_ts_front.png^formspeclib_touchscreen_chest_ts_overlay.png"
 		},
-	paramtype = "light",
-	paramtype2 = "facedir",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{ -0.5, -0.5, 0.4, 0.5, 0.5, 0.5 }
-		}
-    	},
-	on_receive_fields = formspeclib_touchscreen.ts_on_receive_fields,
-	digiline = 
-	{
-		receptor = {},
-		effector = {
-			action = formspeclib_touchscreen.ts_on_digiline_receive
-		},
-	},
-	light_source = 8,
 	can_dig = function(pos, player)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
